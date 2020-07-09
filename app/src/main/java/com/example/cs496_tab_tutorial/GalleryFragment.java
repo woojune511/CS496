@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 public class GalleryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
@@ -13,7 +14,8 @@ public class GalleryFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment2, null);
-
+        GridView gridView = view.findViewById(R.id.gridView);
+        gridView.setAdapter(new ImageAdapter(getContext()));
         return view;
     }
 }
