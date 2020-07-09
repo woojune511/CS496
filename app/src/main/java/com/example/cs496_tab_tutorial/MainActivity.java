@@ -3,6 +3,7 @@ package com.example.cs496_tab_tutorial;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +28,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private PagerAdapter mPagerAdapter;
 
     class PersonAdapter extends ArrayAdapter<Person> {
 
@@ -65,26 +70,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        TabLayout.Tab phoneTab = tabLayout.newTab();
+        TabLayout.Tab phoneTab = mTabLayout.newTab();
         phoneTab.setText("연락처");
-        tabLayout.addTab(phoneTab);
+        mTabLayout.addTab(phoneTab);
 
-        TabLayout.Tab galleryTab = tabLayout.newTab();
+        TabLayout.Tab galleryTab = mTabLayout.newTab();
         galleryTab.setText("갤러리");
-        tabLayout.addTab(galleryTab);
+        mTabLayout.addTab(galleryTab);
 
-        TabLayout.Tab thirdTab = tabLayout.newTab();
+        TabLayout.Tab thirdTab = mTabLayout.newTab();
         thirdTab.setText("세번째탭");
-        tabLayout.addTab(thirdTab);
+        mTabLayout.addTab(thirdTab);
 
+        mViewPager = (ViewPager) findViewById(R.id.pager_content);
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
         TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int pos = tab.getPosition();
-                changeView(pos);
+                mViewPager.setCurrentItem(pos);
 
             }
 
@@ -98,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        onTabSelectedListener.onTabSelected(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()));
-        tabLayout.addOnTabSelectedListener(onTabSelectedListener);
+        onTabSelectedListener.onTabSelected(mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()));
+        mTabLayout.addOnTabSelectedListener(onTabSelectedListener);
 
 
     }
