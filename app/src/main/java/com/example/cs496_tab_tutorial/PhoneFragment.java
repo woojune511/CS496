@@ -1,11 +1,13 @@
 package com.example.cs496_tab_tutorial;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -22,8 +24,6 @@ public class PhoneFragment extends Fragment {
 
     ListView mListView;
 
-
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -32,7 +32,7 @@ public class PhoneFragment extends Fragment {
         View view = inflater.inflate(R.layout.tab_fragment1, null);
         mListView = (ListView)view.findViewById(R.id.phoneList);
 
-        ArrayList<Person> m_orders = new ArrayList<Person>();
+        final ArrayList<Person> m_orders = new ArrayList<Person>();
 
         AssetManager assetManager = getActivity().getAssets();
 
@@ -66,8 +66,22 @@ public class PhoneFragment extends Fragment {
             e.printStackTrace();
         }
 
-        PersonAdapter m_adapter = new PersonAdapter(getActivity(), R.layout.row, m_orders);
+        final PersonAdapter m_adapter = new PersonAdapter(getActivity(), R.layout.row, m_orders);
         mListView.setAdapter(m_adapter);
+
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                Intent intent = new Intent(getActivity(), PhoneSubActivity.class);
+                intent.putExtra("name", m_orders.get(position).getName());
+                intent.putExtra("number", m_orders.get(position).getNumber());
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
+
+
 }
