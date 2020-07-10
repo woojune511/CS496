@@ -36,6 +36,7 @@
         app:layout_constraintRight_toLeftOf="@id/TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="50dp"
+        android:background="@drawable/buttonstyle"
         />
 
     <Button

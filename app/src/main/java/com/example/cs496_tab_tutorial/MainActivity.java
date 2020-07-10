@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -53,22 +54,16 @@ public class MainActivity extends AppCompatActivity {
             Person p = items.get(position);
             if (p != null) {
                 TextView tt = (TextView) v.findViewById(R.id.toptext);
-                TextView bt = (TextView) v.findViewById(R.id.bottomtext);
+                //TextView bt = (TextView) v.findViewById(R.id.bottomtext);
                 if (tt != null) {
                     tt.setText(p.getName());
                 }
-                if (bt != null) {
-                    bt.setText(p.getNumber());
-                }
+//                if (bt != null) {
+//                    bt.setText(p.getNumber());
+//                }
             }
             return v;
         }
-
-        public void showPopup(View v){
-            PopupMenu popup = new PopupMenu(getContext(), v);
-
-        }
-
     }
 
     @Override

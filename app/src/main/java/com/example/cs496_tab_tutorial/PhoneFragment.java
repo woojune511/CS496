@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,6 +32,7 @@ public class PhoneFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment1, null);
+
         mListView = (ListView)view.findViewById(R.id.phoneList);
 
         final ArrayList<Person> m_orders = new ArrayList<Person>();
@@ -83,5 +86,10 @@ public class PhoneFragment extends Fragment {
         return view;
     }
 
+    public void showPopup(View v){
+//            PopupMenu popup = new PopupMenu(getContext(), v);
+//            MenuInflater inflater = popup.getMenuInflater();
+//            inflater.inflate(R.menu.actions, popup.getmenu());
+    }
 
 }
