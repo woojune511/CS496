@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,10 +58,15 @@ public class MainActivity extends AppCompatActivity {
                     tt.setText(p.getName());
                 }
                 if (bt != null) {
-                    bt.setText("전화번호: " + p.getNumber());
+                    bt.setText(p.getNumber());
                 }
             }
             return v;
+        }
+
+        public void showPopup(View v){
+            PopupMenu popup = new PopupMenu(getContext(), v);
+
         }
 
     }
@@ -109,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         };
         onTabSelectedListener.onTabSelected(mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()));
         mTabLayout.addOnTabSelectedListener(onTabSelectedListener);
+
     }
 /*
     private void changeView(int pos) {
