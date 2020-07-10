@@ -1,6 +1,7 @@
 package com.example.cs496_tab_tutorial;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -36,12 +37,22 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         ImageView imgView = new ImageView(Cont);
-        imgView.setLayoutParams(new GridView.LayoutParams(370, 250));
+        imgView.setLayoutParams(new GridView.LayoutParams(370, 370));
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imgView.setPadding(10, 10, 10, 10);
         imgView.setImageResource(thumbImages[i]);
+
+        imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(Cont, Integer.toString(i), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Cont, PhotoActivity.class);
+                intent.putExtra("pos",i);
+                Cont.startActivity(intent);
+            }
+        });
         return imgView;
     }
 }
