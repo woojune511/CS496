@@ -33,7 +33,7 @@ class PersonAdapter extends ArrayAdapter<Person> {
                 tt.setText(p.getName());
             }
             if (bt != null) {
-                bt.setText("전화번호: " + p.getNumber());
+                bt.setText(p.getNumber());
             }
         }
         return v;
