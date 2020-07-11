@@ -1,6 +1,9 @@
 package com.example.cs496_tab_tutorial;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
@@ -11,25 +14,35 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SliderAdapter extends PagerAdapter {
 
-    public Integer[] images = new Integer[20];
+    public List<String> images = new ArrayList<String>();
     private LayoutInflater inflater;
     private Context context;
 
+    File storageDir;
+
+    //BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+    //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), bmOptions);
+    //myImage.setImageBitmap(myBitmap);
 
     public SliderAdapter(Context context) {
         this.context = context;
-
-        Integer imgNumber = R.drawable.img1;
-        for(int i=0 ; i<20 ; i++){
-            images[i] = imgNumber++;
+        storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File[] files = storageDir.listFiles();
+        int directory_size = files.length;
+        for(int i=0 ; i<directory_size ; i++){
+            images.add(storageDir + "/"+files[i].getName());
         }
     }
 
     @Override
     public int getCount() {
-        return images.length;
+        return images.size();
     }
     @Override
     public boolean isViewFromObject(View view, Object object) {
@@ -43,7 +56,9 @@ public class SliderAdapter extends PagerAdapter {
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.slider, container, false);
         ImageView imageView = (ImageView)v.findViewById(R.id.imageView);
-        imageView.setImageResource(images[position]);
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap myBitmap = BitmapFactory.decodeFile(images.get(position), bmOptions);
+        imageView.setImageBitmap(myBitmap);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200);
         layoutParams.gravity = Gravity.CENTER;
         imageView.setLayoutParams(layoutParams);
