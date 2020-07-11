@@ -1,36 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/OnOffButton"
-        android:layout_width="150dp"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="On/Off"
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/NotifButton"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/buttonstyle"
-        />
-
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/NotifButton"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/OnOffButton"
-        android:background="@drawable/buttonstyle"
-        android:text="Text"
-        android:textColor="#FFFFFF"
-        android:textAllCaps="false"
-        />
-
-</android.support.constraint.ConstraintLayout>
+        android:layout_weight="1"
+        android:text="fragment3" />
+</LinearLayout>
