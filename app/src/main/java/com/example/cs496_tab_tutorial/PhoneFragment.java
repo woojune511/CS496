@@ -3,24 +3,39 @@ package com.example.cs496_tab_tutorial;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
+import android.util.JsonWriter;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class PhoneFragment extends Fragment {
 
@@ -83,13 +98,52 @@ public class PhoneFragment extends Fragment {
             }
         });
 
+        ImageButton addButton = (ImageButton) view.findViewById(R.id.AddButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PopupActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
         return view;
     }
 
-    public void showPopup(View v){
-//            PopupMenu popup = new PopupMenu(getContext(), v);
-//            MenuInflater inflater = popup.getMenuInflater();
-//            inflater.inflate(R.menu.actions, popup.getmenu());
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String newName = "";
+        String newNum = "";
+        System.out.println("\n\n" + newName + "\n" + newNum + "\n\n");
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                newName = data.getStringExtra("newName");
+                newNum = data.getStringExtra("newNum");
+            }
+
+            if (newName == null || newNum == null || newName.equals("") || newNum.equals(""))
+                return;
+
+            File appDir = getContext().getFilesDir();
+            File file = new File(appDir, "phoneNumber.json");
+
+            if (!file.exists()) {
+                try {
+                    JSONObject person = new JSONObject();
+                    person.put("name", newName);
+                    person.put("number", newNum);
+                    JSONArray phones = new JSONArray();
+                    phones.put(person);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //2주차에 DB 할 때 만들자
+        }
     }
+
+
 
 }

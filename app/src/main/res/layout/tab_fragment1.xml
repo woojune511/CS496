@@ -15,14 +15,15 @@
     <ImageButton
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/popup_menu"
-        android:onClick="showPopup"
+        android:src="@drawable/addicon"
+        android:onClick="addContact"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="20dp"
         android:scaleType="fitCenter"
         android:background="#00000000"
+        android:id="@+id/AddButton"
         />
 
 </android.support.constraint.ConstraintLayout>
