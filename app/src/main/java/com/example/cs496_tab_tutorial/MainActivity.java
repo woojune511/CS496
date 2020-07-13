@@ -1,6 +1,7 @@
 package com.example.cs496_tab_tutorial;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -111,6 +112,12 @@ public class MainActivity extends AppCompatActivity {
         onTabSelectedListener.onTabSelected(mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()));
         mTabLayout.addOnTabSelectedListener(onTabSelectedListener);
     }
+
+//    @Override
+//    protected void onNewIntent(Intent intent){
+//        super.onNewIntent(intent);
+//        setIntent(intent);
+//    }
 
 /*
     private void changeView(int pos) {

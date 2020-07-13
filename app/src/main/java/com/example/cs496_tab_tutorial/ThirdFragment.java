@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -74,6 +75,7 @@ public class ThirdFragment extends Fragment {
         });
 
         NotifButton.setOnClickListener(new Button.OnClickListener(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view){
                 TimePickerDialog timedialog = new TimePickerDialog(
@@ -103,7 +105,7 @@ public class ThirdFragment extends Fragment {
         
         return view;
     }
-}
+
 
     private TimePickerDialog.OnTimeSetListener timelistener = new TimePickerDialog.OnTimeSetListener() {
         int hour, min;
@@ -132,17 +134,6 @@ public class ThirdFragment extends Fragment {
         }
     };
 
-// 이와 같이 모든 경우에 서비스로부터 받은 인텐트가 처리 될 수 있도록한다.
-
-    private void processCommand(Intent intent) {
-        if (intent != null) {
-            String command = intent.getStringExtra("command");
-            String name = intent.getStringExtra("name");
-
-            //Toast.makeText(this, "서비스로부터 전달받은 데이터: " + command + ", " + name, Toast.LENGTH_LONG).show();
-        }
-    }
-
     public class AlarmHATT {
         private Context context;
 
@@ -168,7 +159,7 @@ public class ThirdFragment extends Fragment {
             hour = sharedPref.getInt("hour", calendar.get(Calendar.HOUR_OF_DAY));
             min = sharedPref.getInt("min", calendar.get(Calendar.MINUTE));
 
-            System.out.println("\n\n"+Integer.toString(year) + Integer.toString(month) + Integer.toString(day) + Integer.toString(hour) + Integer.toString(min));
+            System.out.println(Integer.toString(year) + Integer.toString(month) + Integer.toString(day) + Integer.toString(hour) + Integer.toString(min));
             calendar.set(year, month, day, hour, min, 0);
 
             //알람 예약
@@ -204,3 +195,4 @@ public class ThirdFragment extends Fragment {
         }
     }
 }
+
