@@ -70,7 +70,7 @@ public class SliderAdapter extends PagerAdapter {
 
         imageView.setLayoutParams(layoutParams);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setPadding(10, 10, 10, 10);
+
         container.addView(v);
 
         delButton.setOnClickListener(new View.OnClickListener() {

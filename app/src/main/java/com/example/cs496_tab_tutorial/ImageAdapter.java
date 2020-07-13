@@ -33,11 +33,6 @@ public class ImageAdapter extends BaseAdapter {
         for(int i=0 ; i<directory_size ; i++){
             thumbImages.add(storageDir + "/"+files[i].getName());
         }
-
-
-
-
-
     }
 
     @Override
@@ -87,8 +82,6 @@ public class ImageAdapter extends BaseAdapter {
 
             }
         });
-
-
         return imgView;
     }
 }
