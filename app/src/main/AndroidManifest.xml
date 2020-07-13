@@ -24,6 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".BroadcastD"></receiver>
         <provider
             android:authorities="com.example.android.fileprovider"
             android:name="android.support.v4.content.FileProvider"

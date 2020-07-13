@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
         };
         onTabSelectedListener.onTabSelected(mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()));
         mTabLayout.addOnTabSelectedListener(onTabSelectedListener);
-
     }
+
 /*
     private void changeView(int pos) {
         ListView listview = (ListView) findViewById(R.id.phoneList);
