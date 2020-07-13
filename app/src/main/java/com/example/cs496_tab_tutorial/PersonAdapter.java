@@ -28,7 +28,7 @@ class PersonAdapter extends ArrayAdapter<Person> {
         Person p = items.get(position);
         if (p != null) {
             TextView tt = (TextView) v.findViewById(R.id.toptext);
-            //TextView bt = (TextView) v.findViewById(R.id.bottomtext);
+//            TextView bt = (TextView) v.findViewById(R.id.bottomtext);
             if (tt != null) {
                 tt.setText(p.getName());
             }

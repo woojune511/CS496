@@ -86,7 +86,7 @@ public class ThirdFragment extends Fragment {
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                 REQUEST);
                     }
-                    Toast.makeText(getActivity(), "turned on", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "turned on", Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(getActivity().getApplicationContext(), NotifService.class);
 //                     intent.putExtra("","");
 //                    getActivity().startService(intent);

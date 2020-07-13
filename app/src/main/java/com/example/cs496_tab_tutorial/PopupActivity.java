@@ -31,8 +31,6 @@ public class PopupActivity extends AppCompatActivity {
                 intent.putExtra("newNum", numInput.getText().toString());
                 setResult(RESULT_OK, intent);
                 finish();
-                //입력된 정보를 json 파일에 덧쓰고,
-                //연락처 fragment에 추가된 연락처가 보이게 하기
             }
         });
 
