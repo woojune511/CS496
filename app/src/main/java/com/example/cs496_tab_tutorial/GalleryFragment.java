@@ -42,11 +42,12 @@ public class GalleryFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private void refresh(){
+    private void FragmentRefresh(){
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         transaction.detach(this).attach(this).commit();
     }
+
 
     String mCurrentPhotoPath;
     private File createImageFile() throws IOException {
@@ -62,7 +63,7 @@ public class GalleryFragment extends Fragment {
         );
         mCurrentPhotoPath = image.getAbsolutePath();
         System.out.println("directory : "+storageDir);
-        refresh();
+        FragmentRefresh();
         return image;
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {

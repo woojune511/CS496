@@ -91,6 +91,17 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if(bundle!=null) {
+            int tab_num = bundle.getInt("item_num");
+            System.out.println("num : "+tab_num);
+            mViewPager.setCurrentItem(tab_num);
+        } else{
+            System.out.println("bundle null!");
+        }
+
+
         TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

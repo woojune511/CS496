@@ -1,5 +1,6 @@
 package com.example.cs496_tab_tutorial;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
@@ -9,11 +10,16 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -28,10 +34,28 @@ import android.widget.Toast;
 
 import java.nio.charset.Charset;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 public class ThirdFragment extends Fragment {
+
+    static final int REQUEST = 0;
+
+
+    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
+    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
+
+    public double lontitube, latitude;
+
+    protected LocationManager locationManager;
+
+    private static String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment3, null);
@@ -41,16 +65,27 @@ public class ThirdFragment extends Fragment {
 
         createNotificationChannel();
 
+
+        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+
         OnOffButton.setOnClickListener(new Button.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view){
                 boolean onoff;
                 SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                onoff = sharedPref.getBoolean("onoff", true);
-//                System.out.println("Before: " + Boolean.toString(onoff));
+                onoff = sharedPref.getBoolean("onoff", false);
+
+
 
                 if(!onoff){
+                    // check gps permission and request
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                REQUEST);
+                    }
                     Toast.makeText(getActivity(), "turned on", Toast.LENGTH_LONG).show();
 //                    Intent intent = new Intent(getActivity().getApplicationContext(), NotifService.class);
 //                     intent.putExtra("","");

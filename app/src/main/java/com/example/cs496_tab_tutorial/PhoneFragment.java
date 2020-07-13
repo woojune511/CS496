@@ -25,9 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.provider.ContactsContract;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
