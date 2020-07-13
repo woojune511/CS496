@@ -23,6 +23,7 @@ public class PhoneSubActivity extends AppCompatActivity {
 
         TextView nametextview = (TextView) findViewById(R.id.nameTextView);
         TextView numtextview = (TextView) findViewById(R.id.numTextView);
+
         nametextview.setText(name);
         numtextview.setText(number);
 
