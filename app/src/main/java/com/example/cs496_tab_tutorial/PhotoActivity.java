@@ -19,6 +19,8 @@ public class PhotoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Integer pos = intent.getExtras().getInt("pos");
         mAdapter = new SliderAdapter(this);
+
+
         mViewPager.setAdapter(mAdapter);
 
         mViewPager.setCurrentItem(pos);

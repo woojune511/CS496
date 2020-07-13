@@ -62,7 +62,7 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imgView = new ImageView(Cont);
         imgView.setLayoutParams(new GridView.LayoutParams(370, 370));
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imgView.setPadding(10, 10, 10, 10);
+        imgView.setPadding(1, 1, 1, 1);
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         Bitmap myBitmap = BitmapFactory.decodeFile(thumbImages.get(i), bmOptions);
         imgView.setImageBitmap(myBitmap);
@@ -75,8 +75,20 @@ public class ImageAdapter extends BaseAdapter {
                 Intent intent = new Intent(Cont, PhotoActivity.class);
                 intent.putExtra("pos",i);
                 Cont.startActivity(intent);
+                storageDir = Cont.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                File[] files = storageDir.listFiles();
+                int directory_size = files.length; // 실제 경로에 있는 파일 수
+
+                if(thumbImages.size() != directory_size) {
+                    //만약 실제 경로의 파일 수와, 내 local 파일 수가 다르다면, 삭제를 했다고 가정
+                    thumbImages.remove(i);
+                    notifyDataSetChanged();
+                }
+
             }
         });
+
+
         return imgView;
     }
 }
