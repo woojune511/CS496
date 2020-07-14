@@ -1,11 +1,9 @@
 package com.example.cs496_tab_tutorial;
 
 import android.Manifest;
-<<<<<<< HEAD
-=======
-import android.app.ProgressDialog;
+
 import android.content.ContentProviderOperation;
->>>>>>> a9c9479f24765474917ca6edbd17816752bace96
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,26 +12,18 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-<<<<<<< HEAD
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+
+import android.os.RemoteException;
+
+import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.PopupMenu;
 
-=======
-import android.os.Message;
-import android.os.RemoteException;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.PopupMenu;
-import android.util.JsonWriter;
->>>>>>> a9c9479f24765474917ca6edbd17816752bace96
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
