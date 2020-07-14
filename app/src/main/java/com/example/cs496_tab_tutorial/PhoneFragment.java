@@ -2,12 +2,11 @@ package com.example.cs496_tab_tutorial;
 
 import android.Manifest;
 
-
-
 import android.content.ContentProviderOperation;
 
 
 import android.app.ProgressDialog;
+
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -29,6 +28,7 @@ import android.os.RemoteException;
 
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.PopupMenu;
+
 
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
