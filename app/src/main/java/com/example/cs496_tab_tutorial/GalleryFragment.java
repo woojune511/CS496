@@ -211,37 +211,7 @@ public class GalleryFragment extends Fragment {
                 }
             }
         });
-
-        delButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(deleteList.size()>0) {
-                    //System.out.println("have delete items");
-
-                    try{
-                        for(int i=0 ; i < deleteList.size() ; i++) {
-                            File tmpFile = new File(deleteList.get(i));
-                            if(tmpFile.exists()) {
-                                //해당 경로에 파일 존재하는지 확인
-                                tmpFile.delete();
-                                FragmentRefresh();
-//                                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                                Bundle bundle = new Bundle();
-//                                bundle.putInt("item_num", 1);
-//                                intent.putExtras(bundle);
-//                                getActivity().startActivity(intent);
-                            }
-                        }
-
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    //System.out.println("no delete items");
-                }
-            }
-        });
+        
 
         return view;
     }
