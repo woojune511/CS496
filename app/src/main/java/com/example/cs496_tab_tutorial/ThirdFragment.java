@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.icu.util.Calendar;
 import android.location.LocationManager;
 import android.os.Build;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
@@ -61,8 +63,11 @@ public class ThirdFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment3, null);
 
-        Button NotifButton = (Button) view.findViewById(R.id.NotifButton);
+        ImageView iv = (ImageView)view.findViewById(R.id.imageView1);
+        final AnimationDrawable drawable =  (AnimationDrawable) iv.getBackground();
+        drawable.start();
 
+        Button NotifButton = (Button) view.findViewById(R.id.NotifButton);
 
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
