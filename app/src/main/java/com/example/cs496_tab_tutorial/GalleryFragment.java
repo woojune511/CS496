@@ -63,7 +63,7 @@ public class GalleryFragment extends Fragment {
                 storageDir
         );
         mCurrentPhotoPath = image.getAbsolutePath();
-        System.out.println("directory : "+storageDir);
+        //System.out.println("directory : "+storageDir);
         FragmentRefresh();
         return image;
     }
@@ -74,7 +74,7 @@ public class GalleryFragment extends Fragment {
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File[] files = storageDir.listFiles();
         directory_size = files.length;
-        System.out.println(directory_size);
+        //System.out.println(directory_size);
         if(directory_size>0){
             textView.setVisibility(View.INVISIBLE);
         }
@@ -137,7 +137,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(deleteList.size()>0) {
-                    System.out.println("have delete items");
+                    //System.out.println("have delete items");
 
                     try{
                         for(int i=0 ; i < deleteList.size() ; i++) {
@@ -159,7 +159,7 @@ public class GalleryFragment extends Fragment {
                     }
 
                 } else {
-                    System.out.println("no delete items");
+                    //System.out.println("no delete items");
                 }
             }
         });

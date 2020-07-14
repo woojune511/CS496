@@ -196,12 +196,12 @@ public class ThirdFragment extends Fragment {
             hour = sharedPref.getInt("hour", calendar.get(Calendar.HOUR_OF_DAY));
             min = sharedPref.getInt("min", calendar.get(Calendar.MINUTE));
 
-            System.out.println(Integer.toString(year) + Integer.toString(month) + Integer.toString(day) + Integer.toString(hour) + Integer.toString(min));
+//            System.out.println(Integer.toString(year) + Integer.toString(month) + Integer.toString(day) + Integer.toString(hour) + Integer.toString(min));
             calendar.set(year, month, day, hour, min, 0);
 
             //알람 예약
             long diff = calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-            System.out.println("time diff: " + diff);
+//            System.out.println("time diff: " + diff);
             if(diff > 0)
                 am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
         }

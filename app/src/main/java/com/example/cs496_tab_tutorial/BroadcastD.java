@@ -103,7 +103,7 @@ public class BroadcastD extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
         //알람 시간이 되었을때 onReceive를 호출함
         //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
-        System.out.println("receive!!!");
+        //System.out.println("receive!!!");
         locationManager = (LocationManager)context.getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());
@@ -119,7 +119,7 @@ public class BroadcastD extends BroadcastReceiver {
             longitude=currentLocation.getLongitude();
             latitude=currentLocation.getLatitude();
 
-            System.out.println("----lati----longi----"+latitude+"\n"+longitude);
+            //System.out.println("----lati----longi----"+latitude+"\n"+longitude);
 
         }
 
@@ -153,9 +153,9 @@ public class BroadcastD extends BroadcastReceiver {
                     int weatherId = weatherArray.getJSONObject(0).getInt("id");
                     String weatherMain = weatherArray.getJSONObject(0).getString("main");
                     // get weather main description
-                    System.out.println("main weather: " + weatherMain);
+                    //System.out.println("main weather: " + weatherMain);
                     // get weather id
-                    System.out.println("weather id : " + weatherId);
+                    //System.out.println("weather id : " + weatherId);
                     if((weatherId == 804) || (weatherId == 805) || (weatherMain.equals("Rain")) || (weatherMain.equals("Snow"))) {
                         NotificationUmbrella(context, intent);
                     }
