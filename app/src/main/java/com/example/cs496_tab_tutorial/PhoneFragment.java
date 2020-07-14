@@ -1,6 +1,7 @@
 package com.example.cs496_tab_tutorial;
 
 import android.Manifest;
+<<<<<<< HEAD
 
 
 import android.content.ContentProviderOperation;
@@ -8,6 +9,9 @@ import android.content.ContentProviderOperation;
 
 import android.app.ProgressDialog;
 
+=======
+import android.app.ProgressDialog;
+>>>>>>> parent of a9c9479... 1st tab add new contact
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+<<<<<<< HEAD
 
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -28,6 +33,8 @@ import android.os.RemoteException;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.PopupMenu;
 
+=======
+>>>>>>> parent of a9c9479... 1st tab add new contact
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
