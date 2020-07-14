@@ -6,17 +6,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.app.FragmentManager;
-import android.view.Gravity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager.widget.PagerAdapter;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,8 +1,6 @@
 package com.example.cs496_tab_tutorial;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,9 +13,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import org.json.JSONArray;

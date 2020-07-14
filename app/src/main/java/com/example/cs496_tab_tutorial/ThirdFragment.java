@@ -12,18 +12,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +30,10 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.Switch;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.nio.charset.Charset;
+import com.github.angads25.toggle.interfaces.OnToggledListener;
+import com.github.angads25.toggle.model.ToggleableView;
+import com.github.angads25.toggle.widget.LabeledSwitch;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -62,25 +61,21 @@ public class ThirdFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment3, null);
 
-        Switch OnOffSwitch = (Switch) view.findViewById(R.id.OnOffSwitch);
         Button NotifButton = (Button) view.findViewById(R.id.NotifButton);
-
-        createNotificationChannel();
-
-        boolean onoff;
 
 
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        onoff = sharedPref.getBoolean("onoff", false);
+        boolean onoff = sharedPref.getBoolean("onoff", false);
 
-        OnOffSwitch.setChecked(onoff);
-        OnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        LabeledSwitch labeledSwitch = view.findViewById(R.id.switch_sample);
+
+        labeledSwitch.setOn(onoff);
+        labeledSwitch.setOnToggledListener(new OnToggledListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean onoff) {
-
+            public void onSwitched(ToggleableView toggleableView, boolean onoff) {
                 if(onoff){
                     // check gps permission and request
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -102,9 +97,19 @@ public class ThirdFragment extends Fragment {
                     editor.commit();
 
                 }
+
             }
 
         });
+
+        createNotificationChannel();
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST);
+        }
 
         NotifButton.setOnClickListener(new Button.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.N)
