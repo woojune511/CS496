@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.icu.util.Calendar;
 import android.location.LocationManager;
 import android.os.Build;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -66,7 +68,11 @@ public class ThirdFragment extends Fragment {
 
         textView = (TextView) view.findViewById(R.id.textView);
         NotifButton = (Button) view.findViewById(R.id.NotifButton);
+        ImageView iv = (ImageView)view.findViewById(R.id.imageView1);
+        final AnimationDrawable drawable =  (AnimationDrawable) iv.getBackground();
+        drawable.start();
 
+        Button NotifButton = (Button) view.findViewById(R.id.NotifButton);
 
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
@@ -211,12 +217,12 @@ public class ThirdFragment extends Fragment {
             hour = sharedPref.getInt("hour", calendar.get(Calendar.HOUR_OF_DAY));
             min = sharedPref.getInt("min", calendar.get(Calendar.MINUTE));
 
-            System.out.println(Integer.toString(year) + Integer.toString(month) + Integer.toString(day) + Integer.toString(hour) + Integer.toString(min));
+//            System.out.println(Integer.toString(year) + Integer.toString(month) + Integer.toString(day) + Integer.toString(hour) + Integer.toString(min));
             calendar.set(year, month, day, hour, min, 0);
 
             //알람 예약
             long diff = calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-            System.out.println("time diff: " + diff);
+//            System.out.println("time diff: " + diff);
             if(diff > 0)
                 am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY ,sender);
         }

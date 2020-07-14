@@ -28,10 +28,16 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.provider.ContactsContract;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.io.BufferedReader;
@@ -49,7 +55,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class PhoneFragment extends Fragment {
 
-    ListView mListView;
+    RecyclerView mRecyclerView;
     ConstraintLayout cl;
     ImageButton addButton;
     ArrayList<Person> phoneBook;
@@ -65,7 +71,27 @@ public class PhoneFragment extends Fragment {
         View view = inflater.inflate(R.layout.tab_fragment1, null);
 
         cl = (ConstraintLayout) view.findViewById(R.id.ConstraintLayout);
-        mListView = (ListView) view.findViewById(R.id.phoneList);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.phoneList);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        mRecyclerView.setHasFixedSize(true);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                System.out.println("SWIPED");
+//                System.out.println("ID: "+ phoneBook.get(viewHolder.getAdapterPosition()).getId());
+                deleteContact(getContext(), Long.parseLong(phoneBook.get(viewHolder.getAdapterPosition()).getId()));
+                refresh();
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
         addButton = (ImageButton) view.findViewById(R.id.AddButton);
         final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout);
 
@@ -115,12 +141,13 @@ public class PhoneFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         String newName = "";
         String newNum = "";
-        System.out.println("\n\n" + newName + "\n" + newNum + "\n\n");
+//        System.out.println("\n\n" + newName + "\n" + newNum + "\n\n");
+
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 newName = data.getStringExtra("newName");
                 newNum = data.getStringExtra("newNum");
-                System.out.println("입력 받은 이름: "+newName+" 입력 받은 번호: "+newNum);
+//                System.out.println("입력 받은 이름: "+newName+" 입력 받은 번호: "+newNum);
 
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -177,12 +204,9 @@ public class PhoneFragment extends Fragment {
                 String name = cursor.getString(nameIndex);
                 String number = cursor.getString(numberIndex);
 
-                Person phoneBook = new Person();
-                phoneBook.setId(id);
-                phoneBook.setName(name);
-                phoneBook.setNumber(number);
+                Person phoneBook = new Person(name, number, id);
 
-//                System.out.println("Name: "+name+" Number: "+number);
+//                System.out.println("Name: "+name+" Number: "+number +"Id : " + id);
                 datas.add(phoneBook);
             }
         }
@@ -194,18 +218,20 @@ public class PhoneFragment extends Fragment {
     public void showContacts(){
         phoneBook = getContacts(getActivity());
 
-        final PersonAdapter m_adapter = new PersonAdapter(getActivity(), R.layout.row, phoneBook);
-        mListView.setAdapter(m_adapter);
+//        System.out.println("number of contacts: "+phoneBook.size());
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PhoneSubActivity.class);
-                intent.putExtra("name", phoneBook.get(position).getName());
-                intent.putExtra("number", phoneBook.get(position).getNumber());
-                startActivity(intent);
-            }
-        });
+        final PersonAdapter m_adapter = new PersonAdapter(phoneBook);
+        m_adapter.addContext(getActivity());
+        mRecyclerView.setAdapter(m_adapter);
+//        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(getActivity(), PhoneSubActivity.class);
+//                intent.putExtra("name", phoneBook.get(position).getName());
+//                intent.putExtra("number", phoneBook.get(position).getNumber());
+//                startActivity(intent);
+//            }
+//        });
     }
 
     @Override
@@ -282,6 +308,19 @@ public class PhoneFragment extends Fragment {
         }.start();
 
     }
+
+    static public void deleteContact(Context context, long contactId){
+//    static public void deleteContact(Context context, String name){
+        context.getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI,
+//                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + "=" + name, null);
+                ContactsContract.RawContacts.CONTACT_ID + "=" + contactId, null);
+    }
+
+    private void refresh(){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
+    }
+
 }
 
 //        final ArrayList<Person> m_orders = new ArrayList<Person>();

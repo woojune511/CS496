@@ -113,6 +113,7 @@ public class BroadcastD extends BroadcastReceiver {
         System.out.println("receive!!!");
         Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(2000);
+
         locationManager = (LocationManager)context.getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());
@@ -128,7 +129,7 @@ public class BroadcastD extends BroadcastReceiver {
             longitude=currentLocation.getLongitude();
             latitude=currentLocation.getLatitude();
 
-            System.out.println("----lati----longi----"+latitude+"\n"+longitude);
+            //System.out.println("----lati----longi----"+latitude+"\n"+longitude);
 
         }
 
@@ -162,9 +163,9 @@ public class BroadcastD extends BroadcastReceiver {
                     int weatherId = weatherArray.getJSONObject(0).getInt("id");
                     String weatherMain = weatherArray.getJSONObject(0).getString("main");
                     // get weather main description
-                    System.out.println("main weather: " + weatherMain);
+                    //System.out.println("main weather: " + weatherMain);
                     // get weather id
-                    System.out.println("weather id : " + weatherId);
+                    //System.out.println("weather id : " + weatherId);
                     if((weatherId == 804) || (weatherId == 805) || (weatherMain.equals("Rain")) || (weatherMain.equals("Snow"))) {
                         NotificationUmbrella(context, intent);
                     }

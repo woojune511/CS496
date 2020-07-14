@@ -102,12 +102,12 @@ public class ImageAdapter extends BaseAdapter {
 
                 } else {
                     imgView.setColorFilter(Color.parseColor("#575655"), PorterDuff.Mode.MULTIPLY);
-                    System.out.println(imgView.getColorFilter().hashCode());
+                    //System.out.println(imgView.getColorFilter().hashCode());
                     deleteImages.add(thumbImages.get(i));
                 }
 
                 if(deleteImages.size()>0) {
-                    System.out.println("delete");
+                    //System.out.println("delete");
                     delButton.setVisibility(View.VISIBLE);
                 }
                 return true;
