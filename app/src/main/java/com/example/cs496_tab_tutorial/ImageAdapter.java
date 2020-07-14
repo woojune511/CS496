@@ -60,7 +60,7 @@ public class ImageAdapter extends BaseAdapter {
         View secondView = vi.inflate(R.layout.tab_fragment2, null);
         final ImageView imgView = new ImageView(Cont);
 
-        final ImageButton delButton = secondView.findViewById(R.id.imageButton2);
+        final ImageButton delButton = secondView.findViewById(R.id.fab_sub1);
         imgView.setLayoutParams(new GridView.LayoutParams(370, 370));
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imgView.setPadding(1, 1, 1, 1);

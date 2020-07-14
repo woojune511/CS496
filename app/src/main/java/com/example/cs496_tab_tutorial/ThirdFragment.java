@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.github.angads25.toggle.interfaces.OnToggledListener;
@@ -39,6 +40,8 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class ThirdFragment extends Fragment {
 
+    Button NotifButton;
+    TextView textView;
     static final int REQUEST = 0;
 
 
@@ -61,7 +64,8 @@ public class ThirdFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment3, null);
 
-        Button NotifButton = (Button) view.findViewById(R.id.NotifButton);
+        textView = (TextView) view.findViewById(R.id.textView);
+        NotifButton = (Button) view.findViewById(R.id.NotifButton);
 
 
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
@@ -69,9 +73,18 @@ public class ThirdFragment extends Fragment {
         final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         boolean onoff = sharedPref.getBoolean("onoff", false);
 
+        int hour = sharedPref.getInt("hour", 0);
+        int min = sharedPref.getInt("min",0);
+        String time = String.format("%02d:%02d", hour, min);
+        System.out.println(time);
+        textView.setText(time);
+
         LabeledSwitch labeledSwitch = view.findViewById(R.id.switch_sample);
 
         labeledSwitch.setOn(onoff);
+        if(!onoff){
+            textView.setVisibility(View.INVISIBLE);
+        }
         labeledSwitch.setOnToggledListener(new OnToggledListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -85,9 +98,9 @@ public class ThirdFragment extends Fragment {
                                 REQUEST);
                     }
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    onoff = true;
                     editor.putBoolean("onoff", onoff);
                     editor.commit();
+                    textView.setVisibility(View.VISIBLE);
                     setAlarm();
                 }
                 else{
@@ -95,6 +108,7 @@ public class ThirdFragment extends Fragment {
                     onoff = false;
                     editor.putBoolean("onoff", onoff);
                     editor.commit();
+                    textView.setVisibility(View.INVISIBLE);
 
                 }
 
@@ -154,7 +168,8 @@ public class ThirdFragment extends Fragment {
             editor.putInt("hour", hour);
             editor.putInt("min", min);
             editor.commit();
-
+            String time = String.format("%02d:%02d", hour, min);
+            textView.setText(time);
             setAlarm();
         }
     };
@@ -203,7 +218,7 @@ public class ThirdFragment extends Fragment {
             long diff = calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
             System.out.println("time diff: " + diff);
             if(diff > 0)
-                am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY ,sender);
         }
     }
 

@@ -17,10 +17,15 @@ import androidx.core.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,9 +36,11 @@ import java.util.List;
 
 public class GalleryFragment extends Fragment {
     public List<String> deleteList = new ArrayList<String>();
-    Context mContext;
     ImageView myImage;
     TextView textView;
+    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
+    private boolean isFabOpen = false;
+    private Animation fab_open, fab_close;
     ImageButton delButton;
     ImageButton addButton;
     int directory_size;
@@ -67,6 +74,28 @@ public class GalleryFragment extends Fragment {
         FragmentRefresh();
         return image;
     }
+
+    private void toggleFab() {
+
+        if (isFabOpen) {
+            fab_main.setImageResource(R.drawable.ic_add);
+            fab_sub1.startAnimation(fab_close);
+            fab_sub2.startAnimation(fab_close);
+            fab_sub1.setClickable(false);
+            fab_sub2.setClickable(false);
+            isFabOpen = false;
+
+        } else {
+            fab_main.setImageResource(R.drawable.ic_close);
+            fab_sub1.startAnimation(fab_open);
+            fab_sub2.startAnimation(fab_open);
+            fab_sub1.setClickable(true);
+            fab_sub2.setClickable(true);
+            isFabOpen = true;
+
+        }
+
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.tab_fragment2, null);
@@ -83,17 +112,68 @@ public class GalleryFragment extends Fragment {
         ImageAdapter imageAdapter = new ImageAdapter(getActivity());
         deleteList = imageAdapter.deleteImages;
         gridView.setAdapter(imageAdapter);
-        delButton = view.findViewById(R.id.imageButton2);
-        addButton = view.findViewById(R.id.imageButton);
+//        delButton = view.findViewById(R.id.imageButton2);
+//        addButton = view.findViewById(R.id.imageButton);
         final int REQUEST_TAKE_PHOTO = 1;
+
+
+
+        fab_open = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_close);
+        fab_main = (FloatingActionButton) view.findViewById(R.id.fab_main);
+        fab_sub1 = (FloatingActionButton) view.findViewById(R.id.fab_sub1);
+        fab_sub2 = (FloatingActionButton) view.findViewById(R.id.fab_sub2);
+
+
         if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST2);
         }
 
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        fab_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleFab();
+
+            }
+        });
+
+        fab_sub1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleFab();
+                if(deleteList.size()>0) {
+                    System.out.println("have delete items");
+
+                    try{
+                        for(int i=0 ; i < deleteList.size() ; i++) {
+                            File tmpFile = new File(deleteList.get(i));
+                            if(tmpFile.exists()) {
+                                //해당 경로에 파일 존재하는지 확인
+                                tmpFile.delete();
+                                FragmentRefresh();
+//                                Intent intent = new Intent(getActivity(), MainActivity.class);
+//                                Bundle bundle = new Bundle();
+//                                bundle.putInt("item_num", 1);
+//                                intent.putExtras(bundle);
+//                                getActivity().startActivity(intent);
+                            }
+                        }
+
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    System.out.println("no delete items");
+                }
+            }
+        });
+
+        fab_sub2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleFab();
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED) {
                     // Permission is not granted
@@ -129,40 +209,81 @@ public class GalleryFragment extends Fragment {
                     }
 
                 }
-
             }
         });
 
-        delButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(deleteList.size()>0) {
-                    System.out.println("have delete items");
-
-                    try{
-                        for(int i=0 ; i < deleteList.size() ; i++) {
-                            File tmpFile = new File(deleteList.get(i));
-                            if(tmpFile.exists()) {
-                                //해당 경로에 파일 존재하는지 확인
-                                tmpFile.delete();
-                                FragmentRefresh();
-//                                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                                Bundle bundle = new Bundle();
-//                                bundle.putInt("item_num", 1);
-//                                intent.putExtras(bundle);
-//                                getActivity().startActivity(intent);
-                            }
-                        }
-
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    System.out.println("no delete items");
-                }
-            }
-        });
+//        addButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+//                        != PackageManager.PERMISSION_GRANTED) {
+//                    // Permission is not granted
+//                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA,}, REQUEST);
+//                } else {
+//                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//                    if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) !=null) {
+//                        //Create file where the photo should go
+//                        File photoFile = null;
+//                        try {
+//
+//                            photoFile = createImageFile();
+//
+//                        } catch (IOException ex){
+//                            ex.printStackTrace();
+//                        }
+//
+//                        if(photoFile != null) {
+//
+//
+//                            Uri photoURI = FileProvider.getUriForFile(getActivity(), "com.example.android.fileprovider", photoFile);
+//                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//
+//                            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                            File f = new File(mCurrentPhotoPath);
+//                            Uri contentUri = Uri.fromFile(f);
+//                            mediaScanIntent.setData(contentUri);
+//                            getActivity().sendBroadcast(mediaScanIntent);
+//
+//                        }
+//                    }
+//
+//                }
+//
+//            }
+//        });
+//
+//        delButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(deleteList.size()>0) {
+//                    System.out.println("have delete items");
+//
+//                    try{
+//                        for(int i=0 ; i < deleteList.size() ; i++) {
+//                            File tmpFile = new File(deleteList.get(i));
+//                            if(tmpFile.exists()) {
+//                                //해당 경로에 파일 존재하는지 확인
+//                                tmpFile.delete();
+//                                FragmentRefresh();
+////                                Intent intent = new Intent(getActivity(), MainActivity.class);
+////                                Bundle bundle = new Bundle();
+////                                bundle.putInt("item_num", 1);
+////                                intent.putExtras(bundle);
+////                                getActivity().startActivity(intent);
+//                            }
+//                        }
+//
+//                    } catch (Exception e){
+//                        e.printStackTrace();
+//                    }
+//
+//                } else {
+//                    System.out.println("no delete items");
+//                }
+//            }
+//        });
 
         return view;
     }

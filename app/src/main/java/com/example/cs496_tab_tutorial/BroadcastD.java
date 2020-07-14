@@ -16,6 +16,9 @@ import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+
+import android.os.PowerManager;
+import android.os.Vibrator;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -95,7 +98,11 @@ public class BroadcastD extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
-
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK  |
+                PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                PowerManager.ON_AFTER_RELEASE, "My:Tag");
+        wakeLock.acquire(2000);
         notificationmanager.notify(1, builder.build());
 
     }
@@ -104,6 +111,8 @@ public class BroadcastD extends BroadcastReceiver {
         //알람 시간이 되었을때 onReceive를 호출함
         //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
         System.out.println("receive!!!");
+        Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(2000);
         locationManager = (LocationManager)context.getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());

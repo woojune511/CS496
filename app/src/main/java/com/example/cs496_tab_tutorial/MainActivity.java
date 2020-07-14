@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.addTab(galleryTab);
 
         TabLayout.Tab thirdTab = mTabLayout.newTab();
-        thirdTab.setText("세번째탭");
+        thirdTab.setText("아맞다!우산");
         mTabLayout.addTab(thirdTab);
 
         mViewPager = (ViewPager) findViewById(R.id.pager_content);
