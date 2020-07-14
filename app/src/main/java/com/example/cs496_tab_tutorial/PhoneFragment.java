@@ -2,9 +2,11 @@ package com.example.cs496_tab_tutorial;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -12,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.RemoteException;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -56,6 +59,7 @@ public class PhoneFragment extends Fragment {
     ImageButton addButton;
     ArrayList<Person> phoneBook;
     static final int REQUEST = 0;
+    static final int REQUEST2 = 1;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +98,12 @@ public class PhoneFragment extends Fragment {
             showContacts();
         }
 
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_CONTACTS,}, REQUEST2);
+        }
+
         ImageButton addButton = (ImageButton) view.findViewById(R.id.AddButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +126,15 @@ public class PhoneFragment extends Fragment {
                 newName = data.getStringExtra("newName");
                 newNum = data.getStringExtra("newNum");
                 System.out.println("입력 받은 이름: "+newName+" 입력 받은 번호: "+newNum);
-                phoneBook.add(new Person(newName, newNum));
+
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_CONTACTS,}, REQUEST2);
+                }
+                else
+                    addContact(newName, newNum);
+                //phoneBook.add(new Person(newName, newNum));
             }
 
 //            if (newName == null || newNum == null || newName.equals("") || newNum.equals(""))
@@ -213,6 +231,61 @@ public class PhoneFragment extends Fragment {
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+    }
+
+    public void addContact(final String newName, final String newNum){
+        new Thread(){
+            @Override
+            public void run() {
+
+                ArrayList<ContentProviderOperation> list = new ArrayList<>();
+                try{
+                    list.add(
+                            ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                                    .build()
+                    );
+
+                    list.add(
+                            ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, newName)   //이름
+
+                                    .build()
+                    );
+
+                    list.add(
+                            ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, newNum)           //전화번호
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE  , ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)   //번호타입(Type_Mobile : 모바일)
+
+                                    .build()
+                    );
+
+//                    list.add(
+//                            ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+//                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+//                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
+//                                    .withValue(ContactsContract.CommonDataKinds.Email.DATA  , "hong_gildong@naver.com")  //이메일
+//                                    .withValue(ContactsContract.CommonDataKinds.Email.TYPE  , ContactsContract.CommonDataKinds.Email.TYPE_WORK)     //이메일타입(Type_Work : 직장)
+//
+//                                    .build()
+//                    );
+
+                    getActivity().getContentResolver().applyBatch(ContactsContract.AUTHORITY, list);  //주소록추가
+                    list.clear();   //리스트 초기화
+                }catch(RemoteException e){
+                    e.printStackTrace();
+                }catch(OperationApplicationException e){
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+
     }
 }
 
