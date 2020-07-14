@@ -123,14 +123,14 @@ public class ThirdFragment extends Fragment {
                         false
                 );
                 timedialog.show();
-                DatePickerDialog datedialog = new DatePickerDialog(
-                        getActivity(),
-                        datelistener,
-                        Calendar.getInstance().get(Calendar.YEAR),
-                        Calendar.getInstance().get(Calendar.MONTH),
-                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-                );
-                datedialog.show();
+//                DatePickerDialog datedialog = new DatePickerDialog(
+//                        getActivity(),
+//                        datelistener,
+//                        Calendar.getInstance().get(Calendar.YEAR),
+//                        Calendar.getInstance().get(Calendar.MONTH),
+//                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+//                );
+//                datedialog.show();
 
                 SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                 boolean onoff = sharedPref.getBoolean("onoff", true);
@@ -159,17 +159,17 @@ public class ThirdFragment extends Fragment {
         }
     };
 
-    private DatePickerDialog.OnDateSetListener datelistener = new DatePickerDialog.OnDateSetListener(){
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int day){
-            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt("year", year);
-            editor.putInt("month", month);
-            editor.putInt("day", day);
-            editor.commit();
-        }
-    };
+//    private DatePickerDialog.OnDateSetListener datelistener = new DatePickerDialog.OnDateSetListener(){
+//        @Override
+//        public void onDateSet(DatePicker view, int year, int month, int day){
+//            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sharedPref.edit();
+//            editor.putInt("year", year);
+//            editor.putInt("month", month);
+//            editor.putInt("day", day);
+//            editor.commit();
+//        }
+//    };
 
     public class AlarmHATT {
         private Context context;
