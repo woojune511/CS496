@@ -142,6 +142,7 @@ public class PhoneFragment extends Fragment {
         String newName = "";
         String newNum = "";
 //        System.out.println("\n\n" + newName + "\n" + newNum + "\n\n");
+
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 newName = data.getStringExtra("newName");
@@ -155,7 +156,6 @@ public class PhoneFragment extends Fragment {
                 }
                 else
                     addContact(newName, newNum);
-                    refresh();
                 //phoneBook.add(new Person(newName, newNum));
             }
 
@@ -223,7 +223,6 @@ public class PhoneFragment extends Fragment {
         final PersonAdapter m_adapter = new PersonAdapter(phoneBook);
         m_adapter.addContext(getActivity());
         mRecyclerView.setAdapter(m_adapter);
-
 //        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -307,6 +306,7 @@ public class PhoneFragment extends Fragment {
                 }
             }
         }.start();
+
     }
 
     static public void deleteContact(Context context, long contactId){
