@@ -20,7 +20,7 @@
     <ImageButton
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/addicon"
+        android:src="@drawable/plusicon"
         android:onClick="addContact"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

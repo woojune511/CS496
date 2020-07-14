@@ -33,6 +33,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -85,8 +86,7 @@ public class PhoneFragment extends Fragment {
 //                System.out.println("SWIPED");
 //                System.out.println("ID: "+ phoneBook.get(viewHolder.getAdapterPosition()).getId());
                 deleteContact(getContext(), Long.parseLong(phoneBook.get(viewHolder.getAdapterPosition()).getId()));
-//                    deleteContact(getContext(), 2);
-//                deleteContact(getContext(), phoneBook.get(viewHolder.getAdapterPosition()).getName());
+                refresh();
             }
         });
 
@@ -155,6 +155,7 @@ public class PhoneFragment extends Fragment {
                 }
                 else
                     addContact(newName, newNum);
+                    refresh();
                 //phoneBook.add(new Person(newName, newNum));
             }
 
@@ -306,7 +307,6 @@ public class PhoneFragment extends Fragment {
                 }
             }
         }.start();
-
     }
 
     static public void deleteContact(Context context, long contactId){
@@ -314,6 +314,11 @@ public class PhoneFragment extends Fragment {
         context.getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI,
 //                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + "=" + name, null);
                 ContactsContract.RawContacts.CONTACT_ID + "=" + contactId, null);
+    }
+
+    private void refresh(){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
     }
 
 }
