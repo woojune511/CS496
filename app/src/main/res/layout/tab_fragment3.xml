@@ -5,18 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/OnOffButton"
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/umbrella"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+
+    <Switch
+        android:id="@+id/OnOffSwitch"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="On/Off"
+        android:text="우산 알림 On/Off"
         android:textAllCaps="false"
+        android:layout_marginTop="60dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/NotifButton"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/buttonstyle"
+        app:layout_constraintTop_toTopOf="@id/imageView2"
         />
 
     <Button
@@ -26,11 +39,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/OnOffButton"
+        app:layout_constraintTop_toBottomOf="@id/OnOffSwitch"
         android:background="@drawable/buttonstyle"
         android:text="Set Time"
         android:textColor="#FFFFFF"
         android:textAllCaps="false"
         />
+
 
 </android.support.constraint.ConstraintLayout>

@@ -28,7 +28,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -60,25 +62,26 @@ public class ThirdFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment3, null);
 
-        Button OnOffButton = (Button) view.findViewById(R.id.OnOffButton);
+        Switch OnOffSwitch = (Switch) view.findViewById(R.id.OnOffSwitch);
         Button NotifButton = (Button) view.findViewById(R.id.NotifButton);
 
         createNotificationChannel();
 
+        boolean onoff;
+
 
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
-        OnOffButton.setOnClickListener(new Button.OnClickListener(){
+        final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        onoff = sharedPref.getBoolean("onoff", false);
+
+        OnOffSwitch.setChecked(onoff);
+        OnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onClick(View view){
-                boolean onoff;
-                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                onoff = sharedPref.getBoolean("onoff", false);
+            public void onCheckedChanged(CompoundButton compoundButton, boolean onoff) {
 
-
-
-                if(!onoff){
+                if(onoff){
                     // check gps permission and request
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
@@ -86,26 +89,20 @@ public class ThirdFragment extends Fragment {
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                 REQUEST);
                     }
-                    Toast.makeText(getActivity(), "turned on", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(getActivity().getApplicationContext(), NotifService.class);
-//                     intent.putExtra("","");
-//                    getActivity().startService(intent);
-
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    onoff = true;
+                    editor.putBoolean("onoff", onoff);
+                    editor.commit();
+                    setAlarm();
                 }
                 else{
-                    Toast.makeText(getActivity(), "turned off", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(getActivity().getApplicationContext(), NotifService.class);
-//                    getActivity().stopService(intent);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    onoff = false;
+                    editor.putBoolean("onoff", onoff);
+                    editor.commit();
+
                 }
-                SharedPreferences.Editor editor = sharedPref.edit();
-                onoff = !onoff;
-                editor.putBoolean("onoff", onoff);
-                editor.commit();
-
-                setAlarm();
-//                System.out.println("After: " + Boolean.toString(onoff));
             }
-
 
         });
 

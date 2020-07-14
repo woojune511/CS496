@@ -70,6 +70,7 @@ public class SliderAdapter extends PagerAdapter {
 
         imageView.setLayoutParams(layoutParams);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setRotation(90);
 
         container.addView(v);
 

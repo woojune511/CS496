@@ -29,12 +29,17 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class GalleryFragment extends Fragment {
+    public List<String> deleteList = new ArrayList<String>();
     Context mContext;
     ImageView myImage;
     TextView textView;
+    ImageButton delButton;
+    ImageButton addButton;
     int directory_size;
     static final int REQUEST = 0;
     static final int REQUEST2 = 0;
@@ -79,16 +84,18 @@ public class GalleryFragment extends Fragment {
         }
         GridView gridView = view.findViewById(R.id.gridView);
 
-        gridView.setAdapter(new ImageAdapter(getActivity()));
-
-        ImageButton imgButton = view.findViewById(R.id.imageButton);
+        ImageAdapter imageAdapter = new ImageAdapter(getActivity());
+        deleteList = imageAdapter.deleteImages;
+        gridView.setAdapter(imageAdapter);
+        delButton = view.findViewById(R.id.imageButton2);
+        addButton = view.findViewById(R.id.imageButton);
         final int REQUEST_TAKE_PHOTO = 1;
         if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST2);
         }
 
 
-        imgButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
@@ -127,6 +134,37 @@ public class GalleryFragment extends Fragment {
 
                 }
 
+            }
+        });
+
+        delButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(deleteList.size()>0) {
+                    System.out.println("have delete items");
+
+                    try{
+                        for(int i=0 ; i < deleteList.size() ; i++) {
+                            File tmpFile = new File(deleteList.get(i));
+                            if(tmpFile.exists()) {
+                                //해당 경로에 파일 존재하는지 확인
+                                tmpFile.delete();
+                                FragmentRefresh();
+//                                Intent intent = new Intent(getActivity(), MainActivity.class);
+//                                Bundle bundle = new Bundle();
+//                                bundle.putInt("item_num", 1);
+//                                intent.putExtras(bundle);
+//                                getActivity().startActivity(intent);
+                            }
+                        }
+
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    System.out.println("no delete items");
+                }
             }
         });
 
