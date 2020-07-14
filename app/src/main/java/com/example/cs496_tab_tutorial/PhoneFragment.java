@@ -1,9 +1,11 @@
 package com.example.cs496_tab_tutorial;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,7 +13,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.PopupMenu;
 import android.util.JsonWriter;
 import android.view.LayoutInflater;
@@ -50,6 +55,7 @@ public class PhoneFragment extends Fragment {
     ConstraintLayout cl;
     ImageButton addButton;
     ArrayList<Person> phoneBook;
+    static final int REQUEST = 0;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,21 +68,31 @@ public class PhoneFragment extends Fragment {
         cl = (ConstraintLayout) view.findViewById(R.id.ConstraintLayout);
         mListView = (ListView) view.findViewById(R.id.phoneList);
         addButton = (ImageButton) view.findViewById(R.id.AddButton);
+        final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout);
 
-        phoneBook = getContacts(getActivity());
-
-        final PersonAdapter m_adapter = new PersonAdapter(getActivity(), R.layout.row, phoneBook);
-        mListView.setAdapter(m_adapter);
-
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                Intent intent = new Intent(getActivity(), PhoneSubActivity.class);
-                intent.putExtra("name", phoneBook.get(position).getName());
-                intent.putExtra("number", phoneBook.get(position).getNumber());
-                startActivity(intent);
+            public void onRefresh() {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS,}, REQUEST);
+                }
+                else
+                    showContacts();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+
+        //request permission
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS,}, REQUEST);
+        }
+        else{
+            showContacts();
+        }
 
         ImageButton addButton = (ImageButton) view.findViewById(R.id.AddButton);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -87,67 +103,8 @@ public class PhoneFragment extends Fragment {
             }
         });
 
-
-//        final ArrayList<Person> m_orders = new ArrayList<Person>();
-//
-//        AssetManager assetManager = getActivity().getAssets();
-//
-//        try{
-//            InputStream is = assetManager.open("jsons/phoneNumber.json");
-//            InputStreamReader isr = new InputStreamReader(is);
-//            BufferedReader reader = new BufferedReader(isr);
-//
-//            StringBuffer buffer = new StringBuffer();
-//            String line = reader.readLine();
-//            while(line!=null){
-//                buffer.append(line+"\n");
-//                line = reader.readLine();
-//            }
-//
-//            String jsonData = buffer.toString();
-//            JSONObject jsonObject = new JSONObject(jsonData);
-//            String phones = jsonObject.getString("phones");
-//            JSONArray jsonArray = new JSONArray(phones);
-//            System.out.println(jsonArray.length());
-//            for(int i=0 ; i < jsonArray.length() ; i++) {
-//                JSONObject subJsonObject = jsonArray.getJSONObject(i);
-//                String name = subJsonObject.getString("name");
-//                String number = subJsonObject.getString("number");
-//
-//                Person p = new Person(name, number);
-//                m_orders.add(p);
-//            }
-//
-//        } catch (IOException | JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        final PersonAdapter m_adapter = new PersonAdapter(getActivity(), R.layout.row, m_orders);
-//        mListView.setAdapter(m_adapter);
-//
-//
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-//                Intent intent = new Intent(getActivity(), PhoneSubActivity.class);
-//                intent.putExtra("name", m_orders.get(position).getName());
-//                intent.putExtra("number", m_orders.get(position).getNumber());
-//                startActivity(intent);
-//            }
-//        });
-//
-//        ImageButton addButton = (ImageButton) view.findViewById(R.id.AddButton);
-//        addButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), PopupActivity.class);
-//                startActivityForResult(intent, 1);
-//            }
-//        });
-
         return view;
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -220,5 +177,98 @@ public class PhoneFragment extends Fragment {
         cursor.close();
         return datas;
     }
+
+    public void showContacts(){
+        phoneBook = getContacts(getActivity());
+
+        final PersonAdapter m_adapter = new PersonAdapter(getActivity(), R.layout.row, phoneBook);
+        mListView.setAdapter(m_adapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), PhoneSubActivity.class);
+                intent.putExtra("name", phoneBook.get(position).getName());
+                intent.putExtra("number", phoneBook.get(position).getNumber());
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        switch (requestCode) {
+            case REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showContacts();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
 }
 
+//        final ArrayList<Person> m_orders = new ArrayList<Person>();
+//
+//        AssetManager assetManager = getActivity().getAssets();
+//
+//        try{
+//            InputStream is = assetManager.open("jsons/phoneNumber.json");
+//            InputStreamReader isr = new InputStreamReader(is);
+//            BufferedReader reader = new BufferedReader(isr);
+//
+//            StringBuffer buffer = new StringBuffer();
+//            String line = reader.readLine();
+//            while(line!=null){
+//                buffer.append(line+"\n");
+//                line = reader.readLine();
+//            }
+//
+//            String jsonData = buffer.toString();
+//            JSONObject jsonObject = new JSONObject(jsonData);
+//            String phones = jsonObject.getString("phones");
+//            JSONArray jsonArray = new JSONArray(phones);
+//            System.out.println(jsonArray.length());
+//            for(int i=0 ; i < jsonArray.length() ; i++) {
+//                JSONObject subJsonObject = jsonArray.getJSONObject(i);
+//                String name = subJsonObject.getString("name");
+//                String number = subJsonObject.getString("number");
+//
+//                Person p = new Person(name, number);
+//                m_orders.add(p);
+//            }
+//
+//        } catch (IOException | JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        final PersonAdapter m_adapter = new PersonAdapter(getActivity(), R.layout.row, m_orders);
+//        mListView.setAdapter(m_adapter);
+//
+//
+//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+//                Intent intent = new Intent(getActivity(), PhoneSubActivity.class);
+//                intent.putExtra("name", m_orders.get(position).getName());
+//                intent.putExtra("number", m_orders.get(position).getNumber());
+//                startActivity(intent);
+//            }
+//        });
+//
+//        ImageButton addButton = (ImageButton) view.findViewById(R.id.AddButton);
+//        addButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), PopupActivity.class);
+//                startActivityForResult(intent, 1);
+//            }
+//        });
