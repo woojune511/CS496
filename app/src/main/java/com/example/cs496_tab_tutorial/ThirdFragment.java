@@ -46,7 +46,7 @@ public class ThirdFragment extends Fragment {
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
 
-    public double lontitube, latitude;
+    public double longitude, latitude;
 
     protected LocationManager locationManager;
 

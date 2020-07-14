@@ -44,7 +44,7 @@ public class BroadcastD extends BroadcastReceiver {
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
 
-    public double lontitube, latitude;
+    public double longitude, latitude;
 
     protected LocationManager locationManager;
     protected Location currentLocation;
@@ -105,7 +105,7 @@ public class BroadcastD extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
         //알람 시간이 되었을때 onReceive를 호출함
         //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
-        System.out.println("recieve!!!");
+        System.out.println("receive!!!");
         locationManager = (LocationManager)context.getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());
@@ -118,10 +118,10 @@ public class BroadcastD extends BroadcastReceiver {
                     currentLocation.getLongitude(), currentLocation.getLatitude()
 
             );
-            lontitube=currentLocation.getLongitude();
+            longitude=currentLocation.getLongitude();
             latitude=currentLocation.getLatitude();
 
-            System.out.println("----lati----longi----"+latitude+"\n"+lontitube);
+            System.out.println("----lati----longi----"+latitude+"\n"+longitude);
 
         }
 
@@ -131,7 +131,7 @@ public class BroadcastD extends BroadcastReceiver {
             public void run() {
                 try {
 
-                    String inputUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + Double.toString(latitude) + "&lon=" + Double.toString(lontitube)+ "&lang=kr&APPID=6114a7251f00c2d006a592fa6bb4bb54";
+                    String inputUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + Double.toString(latitude) + "&lon=" + Double.toString(longitude)+ "&lang=kr&APPID=6114a7251f00c2d006a592fa6bb4bb54";
                     Log.d("gps", inputUrl);
                     URL url = new URL(inputUrl);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
