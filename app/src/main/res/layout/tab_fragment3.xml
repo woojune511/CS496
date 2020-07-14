@@ -49,6 +49,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView" />
 
+
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="191dp"
@@ -57,20 +58,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.266"
         app:srcCompat="@drawable/umbrella" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="425dp"
-        android:layout_height="737dp"
-        app:srcCompat="@drawable/frame0"
-        tools:layout_editor_absoluteX="-5dp"
-        tools:layout_editor_absoluteY="-2dp" />
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/animationlist" />
+        android:background="@drawable/animationlist"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-116dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

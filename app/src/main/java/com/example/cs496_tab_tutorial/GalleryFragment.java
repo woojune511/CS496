@@ -211,7 +211,7 @@ public class GalleryFragment extends Fragment {
                 }
             }
         });
-        
+
 
         return view;
     }
