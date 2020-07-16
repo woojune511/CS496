@@ -111,8 +111,7 @@ public class BroadcastD extends BroadcastReceiver {
         //알람 시간이 되었을때 onReceive를 호출함
         //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
         System.out.println("receive!!!");
-        Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(2000);
+
 
         locationManager = (LocationManager)context.getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -134,49 +133,60 @@ public class BroadcastD extends BroadcastReceiver {
         }
 
         new Thread(){
+
+            private boolean stop;
+
+            public void Tread(){
+                stop = false;
+            }
             // send http request
             @Override
             public void run() {
-                try {
+                if(!stop){
+                    try {
 
-                    String inputUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + Double.toString(latitude) + "&lon=" + Double.toString(longitude)+ "&lang=kr&APPID=6114a7251f00c2d006a592fa6bb4bb54";
-                    Log.d("gps", inputUrl);
-                    URL url = new URL(inputUrl);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET"); //method
-                    connection.setDoOutput(true);      // setting to write data
-                    connection.setDoInput(true);        // setting to read data
+                        String inputUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + Double.toString(latitude) + "&lon=" + Double.toString(longitude) + "&lang=kr&APPID=6114a7251f00c2d006a592fa6bb4bb54";
+                        Log.d("gps", inputUrl);
+                        URL url = new URL(inputUrl);
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setRequestMethod("GET"); //method
+                        connection.setDoOutput(true);      // setting to write data
+                        connection.setDoInput(true);        // setting to read data
 
-                    InputStream is = connection.getInputStream();
-                    StringBuilder sb = new StringBuilder();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
-                    String result;
-                    while((result = br.readLine())!=null){
-                        sb.append(result+"\n");
+                        InputStream is = connection.getInputStream();
+                        StringBuilder sb = new StringBuilder();
+                        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                        String result;
+                        while ((result = br.readLine()) != null) {
+                            sb.append(result + "\n");
+                        }
+
+                        result = sb.toString();
+                        // load weather information
+                        JSONObject resultJson = new JSONObject(result);
+                        String weather = resultJson.getString("weather");
+                        JSONArray weatherArray = new JSONArray(weather);
+                        int weatherId = weatherArray.getJSONObject(0).getInt("id");
+                        String weatherMain = weatherArray.getJSONObject(0).getString("main");
+                        // get weather main description
+                        System.out.println("main weather: " + weatherMain);
+                        // get weather id
+                        System.out.println("weather id : " + weatherId);
+                        if ((weatherId == 803) || (weatherId == 804) || (weatherMain.equals("Rain")) || (weatherMain.equals("Snow"))) {
+                            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                            vibrator.vibrate(2000);
+                            NotificationUmbrella(context, intent);
+                            stop = true;
+                        }
+
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-                    result = sb.toString();
-                    // load weather information
-                    JSONObject resultJson = new JSONObject(result);
-                    String weather = resultJson.getString("weather");
-                    JSONArray weatherArray = new JSONArray(weather);
-                    int weatherId = weatherArray.getJSONObject(0).getInt("id");
-                    String weatherMain = weatherArray.getJSONObject(0).getString("main");
-                    // get weather main description
-                    //System.out.println("main weather: " + weatherMain);
-                    // get weather id
-                    //System.out.println("weather id : " + weatherId);
-                    if((weatherId == 804) || (weatherId == 805) || (weatherMain.equals("Rain")) || (weatherMain.equals("Snow"))) {
-                        NotificationUmbrella(context, intent);
-                    }
-
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
         }.start();

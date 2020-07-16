@@ -223,6 +223,8 @@ public class PhoneFragment extends Fragment {
         final PersonAdapter m_adapter = new PersonAdapter(phoneBook);
         m_adapter.addContext(getActivity());
         mRecyclerView.setAdapter(m_adapter);
+
+
 //        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

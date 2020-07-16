@@ -125,11 +125,6 @@ public class GalleryFragment extends Fragment {
         fab_sub2 = (FloatingActionButton) view.findViewById(R.id.fab_sub2);
 
 
-        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST2);
-        }
-
-
         fab_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
